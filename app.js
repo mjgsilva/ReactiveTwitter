@@ -1,11 +1,12 @@
 var express = require('express')
     , http = require('http')
     , bodyParser = require('body-parser')
-    , ntwitter = require('ntwitter')
     , socketio = require('socketio')
+    , ntwitter = require('ntwitter')
     , exphandlebars = require('express-handlebars')
     , config = require('./config')
     , db = require('./models/db')
+    , streamHandler = require('./utils/streamHandler')
     , indexController = require('./routes/index')
     , pageController = require('./routes/page');
 
@@ -31,3 +32,7 @@ app.use('/', router);
 
 var server = http.createServer(app).listen(3545);
 socketio.listen(server);
+
+ntwitter.stream('statuses/filter',{ track: '#nodejs,#reactjs'}, function(stream){
+    streamHandler(stream,socketio);
+});
