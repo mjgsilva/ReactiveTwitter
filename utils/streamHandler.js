@@ -20,8 +20,8 @@ module.exports = function(stream, io) {
             if (!err) {
                 io.emit('tweet', tweet);
             }
-        });
+        })
 
-    });
+    })
 
 };
