@@ -1,6 +1,6 @@
 var Tweet = require('../models/Tweet');
 
-module.exports = function(stream, io) {
+module.exports = function(stream, socketio) {
 
     stream.on('data', function(data) {
 
@@ -8,7 +8,7 @@ module.exports = function(stream, io) {
             id: data['id'],
             body: data['text'],
             author: data['user']['name'],
-            name: data['user']['screen_name'],
+            screenname: data['user']['screen_name'],
             avatar: data['user']['profile_image_url'],
             date: data['created_at'],
             active: false
@@ -18,10 +18,15 @@ module.exports = function(stream, io) {
 
         tweetEntry.save(function(err) {
             if (!err) {
-                io.emit('tweet', tweet);
+                console.log("[add]: " + tweet.id);
+                socketio.emit('tweet', tweet);
             }
-        })
+        });
 
-    })
+    });
+
+    stream.on('error', function(err) {
+       console.log("[err]: " + err);
+    });
 
 };
