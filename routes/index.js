@@ -1,7 +1,7 @@
 var JSX = require('node-jsx').install()
     , React = require('react')
-    , TweetsApp = require('./components/TweetsApp.react')
-    , Tweet = require('./models/tweet');
+    , TweetsApp = require('../components/TweetsApp.react')
+    , Tweet = require('../models/Tweet');
 
 exports.main = function(req, res) {
 
@@ -16,8 +16,8 @@ exports.main = function(req, res) {
         res.render('home', {
             markup: markup,
             state: JSON.stringify(tweets)
-        })
+        });
 
-    })
+    });
 
 };

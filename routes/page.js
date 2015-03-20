@@ -1,4 +1,4 @@
-var Tweet = require('./models/tweet');
+var Tweet = require('../models/Tweet');
 
 exports.getPage = function(req, res) {
 
