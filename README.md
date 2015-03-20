@@ -1,3 +1,8 @@
 # Reactive Twitter
 
-Isomorphic React
+Live twitter feed using Reactjs
+
+### Stack:
+. Nodejs
+. SocketIO
+. Reactjs
