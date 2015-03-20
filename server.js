@@ -1,11 +1,10 @@
 var express = require('express')
     , http = require('http')
     , bodyParser = require('body-parser')
-    , socketio = require('socketio')
-    , ntwitter = require('ntwitter')
+    , twitter = require('twitter')
     , exphandlebars = require('express-handlebars')
+    , db = require('./models/Db')
     , config = require('./config')
-    , db = require('./models/db')
     , streamHandler = require('./utils/streamHandler')
     , indexController = require('./routes/index')
     , pageController = require('./routes/page');
@@ -19,7 +18,7 @@ app.engine('handlebars', exphandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.disable('etag');
 
-var router = express.Router();
+ var router = express.Router();
 
 router.route('/')
     .get(indexController.main);
@@ -27,12 +26,15 @@ router.route('/')
 router.route('/page/:page/:skip')
     .get(pageController.getPage);
 
-
 app.use('/', router);
+app.use("/", express.static(__dirname + "/public/"));
 
-var server = http.createServer(app).listen(3545);
-socketio.listen(server);
 
-ntwitter.stream('statuses/filter',{ track: '#nodejs,#reactjs'}, function(stream){
+var server = http.createServer(app).listen(8089);
+var socketio = require('socket.io').listen(server);
+
+var twit = new twitter(config.twitter);
+
+twit.stream('statuses/filter',{ track: 'javascript' }, function(stream){
     streamHandler(stream,socketio);
 });
